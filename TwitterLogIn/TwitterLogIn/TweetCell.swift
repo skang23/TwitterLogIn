@@ -10,6 +10,7 @@ import UIKit
 
 class TweetCell: UITableViewCell {
 
+    @IBOutlet weak var profileButton: UIButton!
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userID: UILabel!
@@ -18,12 +19,17 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var retweetButton: UIButton!
     
+    @IBOutlet weak var likeCount: UILabel!
+    @IBOutlet weak var retweetCount: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
+    var photo: UIImageView!
     var tweet: Tweet! {
         didSet{
+            
             profilePhoto.setImageWithURL(NSURL(string: tweet.profilePhoto!)!)
+            profileButton.setBackgroundImage(profilePhoto.image, forState: .Normal)
             userName.text = tweet.user?.name
-            userID.text = tweet.user?.screenname
+            userID.text = "@\(tweet.user!.screenname!)"
             tweetLabel.text = tweet.text
             let formatter = NSDateFormatter()
             formatter.dateFormat = "EEE\\MMM\\d"
@@ -71,7 +77,8 @@ class TweetCell: UITableViewCell {
      //           favoriteButton.setImage(image1, forState: UIControlState.)
                 
             }
-            
+          retweetCount.text="\(tweet.retweetCount!)"
+          likeCount.text="\(tweet.favoriteCount!)"
         //    profilePhoto.setImageWithURL(t)
          //   nameLabel.text = business.name
          //   if business.imageURL != nil {
@@ -97,7 +104,10 @@ class TweetCell: UITableViewCell {
                 print("Retweeted tweet: \(self.tweet.tweetID)")
                 let image = UIImage(named: "retweeted")!
                 self.retweetButton.setImage(image, forState: UIControlState.Normal)
-                
+                print(response)
+                let dict = response as! NSDictionary
+                self.tweet.retweetCount = dict["retweet_count"] as! Int
+                self.retweetCount.text = "\(self.tweet.retweetCount!)"
                 }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
                     print("Failed to retweet: \(error)")
             })
@@ -133,7 +143,10 @@ class TweetCell: UITableViewCell {
                 print("Favorited tweet: \(self.tweet.tweetID)")
                 let image = UIImage(named: "liked")!
                 self.favoriteButton.setImage(image, forState: UIControlState.Normal)
-
+                print(response)
+                let dict = response as! NSDictionary
+                self.tweet.favoriteCount = dict["favorite_count"] as! Int
+                self.likeCount.text = "\(self.tweet.favoriteCount!)"
                 
                 }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
                     print("Failed to favorite: \(error)")

@@ -9,6 +9,20 @@
 import UIKit
 import BDBOAuth1Manager
 
+extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(netHex:Int) {
+        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -24,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Current user detected: \(User.currentUser?.name)")
         let vc = storyboard.instantiateViewControllerWithIdentifier("TweetNavigation") as! UINavigationController
             window?.rootViewController = vc
+            vc.navigationBar.tintColor = UIColor(netHex:0x55acee)
             vc.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         }
         // Override point for customization after application launch.
