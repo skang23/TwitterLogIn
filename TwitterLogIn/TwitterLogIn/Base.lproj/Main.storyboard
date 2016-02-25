@@ -120,22 +120,28 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rx4-gW-iEm">
-                                            <rect key="frame" x="3" y="3" width="55" height="55"/>
-                                            <connections>
-                                                <segue destination="O33-6p-Rty" kind="push" id="UCU-RN-aD9"/>
-                                            </connections>
-                                        </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@TheMichaelMoran" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zqR-pm-NPk">
                                             <rect key="frame" x="163" y="5" width="120.5" height="16"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rx4-gW-iEm">
+                                            <rect key="frame" x="3" y="3" width="55" height="55"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="55" id="NJd-0X-egC"/>
+                                                <constraint firstAttribute="height" constant="55" id="f59-Py-47q"/>
+                                            </constraints>
+                                            <connections>
+                                                <segue destination="O33-6p-Rty" kind="push" id="UCU-RN-aD9"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="Ksf-bK-VJc" secondAttribute="bottom" constant="10.5" id="3Zc-mp-Zhj"/>
+                                        <constraint firstItem="fAM-0Z-31I" firstAttribute="top" relation="greaterThanOrEqual" secondItem="rx4-gW-iEm" secondAttribute="bottom" constant="5" id="3dD-hM-zJG"/>
                                         <constraint firstItem="UzX-4D-kFj" firstAttribute="leading" secondItem="Ksf-bK-VJc" secondAttribute="trailing" constant="3" id="9kA-xL-Gjz"/>
+                                        <constraint firstItem="rx4-gW-iEm" firstAttribute="leading" secondItem="1A6-Ul-eC3" secondAttribute="leading" constant="3" id="C1q-K5-wpA"/>
                                         <constraint firstItem="GcI-i5-iWO" firstAttribute="leading" secondItem="1A6-Ul-eC3" secondAttribute="leading" constant="3" id="H6n-sy-MuW"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Tqh-yK-nBu" secondAttribute="bottom" constant="20" id="OeH-0X-Ubj"/>
                                         <constraint firstAttribute="bottom" secondItem="UzX-4D-kFj" secondAttribute="bottom" constant="4.5" id="Q1B-RT-2vt"/>
@@ -151,6 +157,7 @@
                                         <constraint firstItem="fAM-0Z-31I" firstAttribute="leading" secondItem="1A6-Ul-eC3" secondAttribute="leading" constant="3" id="nPQ-e5-XDr"/>
                                         <constraint firstItem="UzX-4D-kFj" firstAttribute="leading" secondItem="Oqv-K2-4KP" secondAttribute="trailing" constant="66" id="paB-cH-Fn3"/>
                                         <constraint firstAttribute="bottom" secondItem="Oqv-K2-4KP" secondAttribute="bottom" constant="5.5" id="qDg-AR-XKZ"/>
+                                        <constraint firstItem="rx4-gW-iEm" firstAttribute="top" secondItem="1A6-Ul-eC3" secondAttribute="top" constant="3" id="rI9-1w-LTL"/>
                                         <constraint firstItem="URk-Y3-Uo2" firstAttribute="leading" secondItem="GcI-i5-iWO" secondAttribute="trailing" constant="2" id="v4z-ag-qfR"/>
                                         <constraint firstAttribute="trailing" secondItem="Tqh-yK-nBu" secondAttribute="trailing" constant="8" id="xVe-D7-okH"/>
                                         <constraint firstItem="Oqv-K2-4KP" firstAttribute="leading" secondItem="leA-7p-SuI" secondAttribute="trailing" constant="3" id="xlL-43-0fk"/>
@@ -179,7 +186,7 @@
                                 <action selector="logOut:" destination="oRt-KB-Y0R" id="H9Z-7G-CQu"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="composetweet" width="36" id="UmE-eW-BFK">
+                        <barButtonItem key="rightBarButtonItem" image="white" width="36" id="UmE-eW-BFK">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="refreshTweets:" destination="oRt-KB-Y0R" id="6GT-jb-740"/>
@@ -291,10 +298,10 @@
     </scenes>
     <resources>
         <image name="blue" width="1687" height="1687"/>
-        <image name="composetweet" width="90" height="90"/>
         <image name="like" width="54" height="72"/>
         <image name="like_pressed" width="54" height="72"/>
         <image name="retweet" width="75" height="72"/>
+        <image name="white" width="100" height="100"/>
         <image name="x_mark" width="240" height="240"/>
     </resources>
 </document>

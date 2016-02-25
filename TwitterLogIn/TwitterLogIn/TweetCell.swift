@@ -145,7 +145,8 @@ class TweetCell: UITableViewCell {
                 self.favoriteButton.setImage(image, forState: UIControlState.Normal)
                 print(response)
                 let dict = response as! NSDictionary
-                self.tweet.favoriteCount = dict["favorite_count"] as! Int
+                self.tweet.favoriteCount = self.tweet.favoriteCount! + 1
+                
                 self.likeCount.text = "\(self.tweet.favoriteCount!)"
                 
                 }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in

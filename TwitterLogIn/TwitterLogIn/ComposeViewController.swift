@@ -19,7 +19,7 @@ class ComposeViewController: UIViewController {
         
         
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        // Do any additional setup aft er loading the view, typically from a nib.
         
         //TwitterClient(baseURL:)
     }
