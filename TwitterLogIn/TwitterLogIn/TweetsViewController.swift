@@ -11,7 +11,7 @@ import UIKit
 class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet var tableView: UITableView!
     var tweets: [Tweet]?
-    
+    var selectedTweet: Tweet?
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
         
@@ -51,6 +51,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
        // print("cell For Row At Index Path")
        cell.tweet = tweets![indexPath.row]
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.profileButton.tag = indexPath.row
 
         return cell
     }
@@ -63,5 +64,42 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             return 0
         }
     }
+   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     
+    selectedTweet = tweets![indexPath.row]
+    print("tweet: \(selectedTweet)")
+    self.performSegueWithIdentifier("toDetail", sender: self)
+
+        //CODE TO BE RUN ON CELL TOUCH
+    }
+    
+//    @IBAction func imageButtonTapped(sender: AnyObject) {
+//        let cell = sender.superview as! TweetCell
+//       // cell.tweet
+//        print(cell)
+//        print(cell.tweet)
+//    }
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        if (segue.identifier == "toDetail") {
+            let vc = segue.destinationViewController as! DetailViewController
+            vc.tweet = selectedTweet!
+            print("vc: \(vc)")
+
+
+        }else if (segue.identifier == "compose") {
+            let vc = segue.destinationViewController as! ComposeViewController
+            vc.screenname = nil
+            
+            
+            
+        }else if (segue.identifier == "profile"){
+            
+            let vc = segue.destinationViewController as! profileViewController
+            vc.user = tweets![sender.tag].user
+            //  vc.user =
+        }
+    }
+
 }
+
+

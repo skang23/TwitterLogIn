@@ -21,23 +21,115 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
         return Static.instance
     }
- 
-    
     func homeTimelineWithParams(params: NSDictionary?, completion: (tweets:[Tweet]?, error: NSError?) ->()){
         
         
-       GET("1.1/statuses/home_timeline.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+        GET("1.1/statuses/home_timeline.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
             // print("home timeline: \(response)")
             var tweets = Tweet.tweetsWithArray(response as! [NSDictionary])
             for tweet in tweets {
-            //    print("text:\(tweet.text), created: \(tweet.createdAt)")
+                //    print("text:\(tweet.text), created: \(tweet.createdAt)")
             }
-        completion(tweets: tweets, error: nil)
+            completion(tweets: tweets, error: nil)
             }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
                 print("error getting home timeline")
         })
         
     }
+    
+    func favoriteTweet(tweet: Tweet, params: NSDictionary?, completion: () ->()) {
+        POST("1.1/favorites/create.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("Favorited tweet: \(tweet.tweetID)")
+            tweet.favorited = 1
+            let dict = response as! NSDictionary
+            tweet.favoriteCount = tweet.favoriteCount! + 1
+            completion()
+            /*
+            let image = UIImage(named: "liked")!
+            self.favoriteButton.setImage(image, forState: UIControlState.Normal)
+            print(response)*/
+            
+            /*
+            self.likeCount.text = "\(tweet.favoriteCount!)"
+            */
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("Failed to favorite: \(error)")
+        })
+    }
+    func retweetWithId(tweet: Tweet, params: NSDictionary?, completion: () ->()) {
+        POST("1.1/statuses/retweet/\(tweet.tweetID!).json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("Retweeted tweet: \(tweet.tweetID)")
+            let image = UIImage(named: "retweeted")!
+            tweet.retweeted = 1
+            let dict = response as! NSDictionary
+            tweet.retweetCount = dict["retweet_count"] as! Int
+            completion()
+            
+            
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("Failed to retweet: \(error)")
+        })
+    }
+
+    
+    func unretweetWithId(tweet: Tweet, params: NSDictionary?, completion: () ->()) {
+
+        POST("1.1/statuses/unretweet/\(tweet.tweetID!).json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("Unretweeted tweet: \(tweet.tweetID)")
+            let image = UIImage(named: "retweeted")!
+            tweet.retweeted = 0
+            let dict = response as! NSDictionary
+            tweet.retweetCount = dict["retweet_count"] as! Int - 1
+            print(dict["retweet_count"])
+            completion()
+        
+            
+            
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("Failed to unretweet: \(error)")
+        })
+    }
+
+    
+    func unfavoriteTweet(tweet: Tweet, params: NSDictionary?, completion: () ->()) {
+        POST("1.1/favorites/destroy.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("Unfavorited tweet: \(tweet.tweetID)")
+            tweet.favorited = 0
+            let dict = response as! NSDictionary
+            tweet.favoriteCount = tweet.favoriteCount! - 1
+            completion()
+         
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("Failed to unfavorite: \(error)")
+        })
+    }
+    
+    
+    func statusUpdateWithParams(params: NSDictionary?){
+        
+        
+       POST("1.1/statuses/update.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("status update")
+
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("error getting home timeline")
+        })
+        
+    }
+    
+    
+    func replyWithParams(params: NSDictionary?){
+        
+        
+        POST("1.1/direct_messages/new.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
+            print("direct_message")
+            
+            }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("faild to message")
+        })
+        
+    }
+    
     func openURL(url: NSURL){
         fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: BDBOAuth1Credential(queryString: url.query), success: { (accessToken: BDBOAuth1Credential!) -> Void in
             print("Got the access token")

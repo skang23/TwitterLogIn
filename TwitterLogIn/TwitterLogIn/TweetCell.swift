@@ -93,30 +93,31 @@ class TweetCell: UITableViewCell {
     }
     
     @IBAction func retweetClicked(sender: AnyObject) {
+          let params = ["id": tweet.tweetID!] as NSDictionary
         if self.tweet.retweeted > 0 {
-            let image = UIImage(named: "retweeted")!
-            retweetButton.setImage(image, forState: UIControlState.Normal)
+           
+            TwitterClient.sharedInstance.unretweetWithId(tweet, params: params, completion: {
+                ()->() in  self.retweetCount.text = "\(self.tweet.retweetCount!)"
+            
+                    let image = UIImage(named: "retweet")!
+                    self.retweetButton.setImage(image, forState: UIControlState.Normal)
+            
+                
+            })
         }
         else {
-            let params = ["id": tweet.tweetID!] as NSDictionary
+          
             print(tweet.tweetID)
-            TwitterClient.sharedInstance.POST("1.1/statuses/retweet/\(tweet.tweetID!).json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
-                print("Retweeted tweet: \(self.tweet.tweetID)")
-                let image = UIImage(named: "retweeted")!
-                self.retweetButton.setImage(image, forState: UIControlState.Normal)
-                print(response)
-                let dict = response as! NSDictionary
-                self.tweet.retweetCount = dict["retweet_count"] as! Int
-                self.retweetCount.text = "\(self.tweet.retweetCount!)"
-                }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
-                    print("Failed to retweet: \(error)")
+            TwitterClient.sharedInstance.retweetWithId(tweet, params: params, completion: {
+                ()->() in  self.retweetCount.text = "\(self.tweet.retweetCount!)"
+                if self.tweet.retweeted != 0 {
+                    let image = UIImage(named: "retweeted")!
+                    self.retweetButton.setImage(image, forState: UIControlState.Normal)
+                }
+
             })
-            /*
-            TwitterClient.sharedInstance.POST("1.1/statuses/retweet/\(tweet.tweetID).json", parameters: params, success: {(operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
-                print("Retweeted tweet: \(self.tweet.tweetID)")
-            }, failure: { (operation: NSURLSessionDataTask!, error: NSError!) -> Void in
-                    print("Failed to retweet: \(error)")
-            })*/
+           
+      
         }
         
         /*
@@ -132,27 +133,33 @@ class TweetCell: UITableViewCell {
  
     
     @IBAction func likeClicked(sender: AnyObject) {
+           let params = ["id": tweet.tweetID!] as NSDictionary
         if self.tweet.favorited > 0 {
+            TwitterClient.sharedInstance.unfavoriteTweet(tweet, params: params, completion:{()->() in
+                let image = UIImage(named: "like")!
+                self.favoriteButton.setImage(image, forState: UIControlState.Normal)
+                self.likeCount.text = "\(self.tweet.favoriteCount!)"
+                
+                
+                
+            })
+
+            
+            
             let image = UIImage(named: "liked")!
             favoriteButton.setImage(image, forState: UIControlState.Normal)
         }
         else {
-            let params = ["id": tweet.tweetID!] as NSDictionary
-            
-            TwitterClient.sharedInstance.POST("1.1/favorites/create.json", parameters:params, success: { (operation: NSURLSessionDataTask!, response: AnyObject?) -> Void in
-                print("Favorited tweet: \(self.tweet.tweetID)")
+         
+            TwitterClient.sharedInstance.favoriteTweet(tweet, params: params, completion:{()->() in  if self.tweet.favorited != 0 {
                 let image = UIImage(named: "liked")!
                 self.favoriteButton.setImage(image, forState: UIControlState.Normal)
-                print(response)
-                let dict = response as! NSDictionary
-                self.tweet.favoriteCount = self.tweet.favoriteCount! + 1
-                
                 self.likeCount.text = "\(self.tweet.favoriteCount!)"
+                }
+
                 
-                }, failure: { (operation: NSURLSessionDataTask?, error:NSError) -> Void in
-                    print("Failed to favorite: \(error)")
             })
-            
+
         }
     }
 }
